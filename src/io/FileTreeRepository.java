@@ -11,7 +11,7 @@ public class FileTreeRepository {
         Map<Integer, FsNode> levelMap = new HashMap<>();
         levelMap.put(0, root);
 
-        if(!file.exists()) return sample(root);
+        //if(!file.exists()) return sample(root);
 
         try(BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))){
             String line;
@@ -43,13 +43,13 @@ public class FileTreeRepository {
     private int countLeadingSpaces(String s){ int i=0; while(i<s.length() && s.charAt(i)==' ') i++; return i; }
     private NodeType guessType(String name){ if(name.endsWith(":")) return NodeType.DRIVE; if(name.contains(".")) return NodeType.FILE; return NodeType.FOLDER; }
 
-    private FsNode sample(FsNode root){
-        FsNode c = new FsNode("C:", NodeType.DRIVE); root.addChild(c);
-        FsNode f1 = new FsNode("folder1", NodeType.FOLDER); c.addChild(f1);
-        f1.addChild(new FsNode("folder2", NodeType.FOLDER));
-        f1.addChild(new FsNode("folder3", NodeType.FOLDER));
-        c.addChild(new FsNode("folder4", NodeType.FOLDER));
-        root.addChild(new FsNode("D:", NodeType.DRIVE));
-        return root;
-    }
+//    private FsNode sample(FsNode root){
+//        FsNode c = new FsNode("C:", NodeType.DRIVE); root.addChild(c);
+//        FsNode f1 = new FsNode("folder1", NodeType.FOLDER); c.addChild(f1);
+//        f1.addChild(new FsNode("folder2", NodeType.FOLDER));
+//        f1.addChild(new FsNode("folder3", NodeType.FOLDER));
+//        c.addChild(new FsNode("folder4", NodeType.FOLDER));
+//        root.addChild(new FsNode("D:", NodeType.DRIVE));
+//        return root;
+//    }
 }

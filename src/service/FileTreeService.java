@@ -21,7 +21,9 @@ public class FileTreeService {
     public FsNode createFolder(String[] parentPath, String name){
         FsNode parent = find(parentPath);
         FsNode node = new FsNode(name, NodeType.FOLDER);
+        node.addChild(new FsNode("",NodeType.FILE));
         parent.addChild(node);
+
         return node;
     }
 

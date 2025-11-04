@@ -1,11 +1,10 @@
 C:
    folder1
-      folder2
-         fisier1.png
-         fisier2.csv
       folder3
+         grrpow.json
+         snsf
+            
    folder4
-
 D:
    folderA
       fisierX.mp3

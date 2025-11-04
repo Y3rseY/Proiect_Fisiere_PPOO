@@ -16,11 +16,14 @@ public class FileTreeFrame extends JFrame {
     private DefaultMutableTreeNode clickedNode;
     private final PopupController controller;
 
+    private FsNode rootModel;
+    private FileTreeService service;
+
     public FileTreeFrame() {
         super("File Structure");
 
         // Load model
-        FsNode rootModel;
+        //FsNode rootModel;
         try { rootModel = new FileTreeRepository().loadFromText(new File("structura.txt")); }
         catch (Exception e){ throw new RuntimeException(e); }
 
@@ -55,7 +58,13 @@ public class FileTreeFrame extends JFrame {
         add(new JScrollPane(tree), BorderLayout.CENTER);
         setSize(760, 560);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            @Override public void windowClosing(WindowEvent e) {
+                onBeforeExit();  // rulează funcția ta înainte de închidere
+            }
+        });
     }
 
     private void expandFirstLevel(){ for(int i=0;i<tree.getRowCount();i++) tree.expandRow(i); }
@@ -77,5 +86,28 @@ public class FileTreeFrame extends JFrame {
         p.add(miNewFolder); p.add(miNewFile); p.addSeparator();
         p.add(miRename); p.add(miDelete); p.add(miStats);
         return p;
+    }
+
+    private void onBeforeExit() {
+        int choice = JOptionPane.showConfirmDialog(
+                this,
+                "Vrei să salvez modificările înainte de ieșire?",
+                "Confirmare ieșire",
+                JOptionPane.YES_NO_CANCEL_OPTION
+        );
+        if (choice == JOptionPane.CANCEL_OPTION) return;
+
+        if (choice == JOptionPane.YES_OPTION) {
+            try {
+                // dacă ai deja o metodă în service, folosește-o; altfel salvează din repository:
+                new FileTreeRepository().saveToText(rootModel, new File("structura.txt"));
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Eroare la salvare: " + ex.getMessage(),
+                        "Eroare", JOptionPane.ERROR_MESSAGE);
+                return; // nu închide dacă a eșuat salvarea
+            }
+        }
+        dispose();
+        System.exit(0);
     }
 }

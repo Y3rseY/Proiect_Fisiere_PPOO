@@ -27,9 +27,9 @@ public class FileTreeService {
         return node;
     }
 
-    public FsNode createFile(String[] parentPath, String name){
+    public FsNode createFile(String[] parentPath, String name, long sizeBytes){
         FsNode parent = find(parentPath);
-        FsNode node = new FsNode(name, NodeType.FILE);
+        FsNode node = new FsNode(name, NodeType.FILE, sizeBytes);
         parent.addChild(node);
         return node;
     }
@@ -82,14 +82,64 @@ public class FileTreeService {
         return false;
     }
 
+public Stats stats(String[] path){
+    FsNode start = (path == null || path.length == 0)
+            ? root
+            : find(path);
 
-    public Stats stats(String[] path){
-        FsNode n = find(path);
-        Stats s = new Stats();
-        dfs(n,0,s); return s;
+    Stats s = new Stats();
+    dfsStats(start, 0, s);
+    return s;
+}
+
+    private void dfsStats(FsNode node, int depth, Stats s){
+        s.totalNodes++;
+        if (depth > s.maxDepth) s.maxDepth = depth;
+
+        if (node.getType() == NodeType.FILE) {
+            s.files++;
+            s.totalSizeBytes += node.getSizeBytes();
+        } else if (node.getType() == NodeType.FOLDER) {
+            s.folders++;
+        }
+
+        if (node.getChildren() != null) {
+            for (FsNode child : node.getChildren()) {
+                dfsStats(child, depth + 1, s);
+            }
+        }
     }
-    private void dfs(FsNode n,int d,Stats s){
-        s.totalNodes++; if(n.getType()==NodeType.FILE) s.files++; else s.folders++; s.maxDepth=Math.max(s.maxDepth,d);
-        for(FsNode ch: n.getChildren()) dfs(ch,d+1,s);
+
+
+    private void calcStatsDfs(FsNode node, int depth, Stats s){
+        s.totalNodes++;
+
+        // incadram in interpolare de adancime
+        if(depth >= 0 && depth < s.nodesPerDepth.length){
+            s.nodesPerDepth[depth]++;
+
+            int typeIndex = node.getType().ordinal();
+            if(typeIndex >= 0 && typeIndex < s.countByTypePerDepth[depth].length){
+                s.countByTypePerDepth[depth][typeIndex]++;
+            }
+        }
+
+        // numaram foldere / fisiere
+        switch (node.getType()) {
+            case FOLDER -> s.folders++;
+            case FILE   -> s.files++;
+            default     -> { /* DRIVE sau alt tip, il ignori aici */ }
+        }
+
+        if(depth > s.maxDepth){
+            s.maxDepth = depth;
+        }
+
+        // parcurgem recursiv copiii, daca exista
+        if(node.getChildren() != null){
+            for(FsNode child : node.getChildren()){
+                calcStatsDfs(child, depth + 1, s);
+            }
+        }
     }
 }

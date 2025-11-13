@@ -6,11 +6,21 @@ public class FsNode {
     private String name;
     private final NodeType type;
     private FsNode parent;
+    private long sizeBytes;
     private final List<FsNode> children = new ArrayList<>();
 
     public FsNode(String name, NodeType type) {
-        this.name = name; this.type = type;
+        this(name,type,0);
     }
+    public FsNode(String name, NodeType type, long sizeBytes) {
+        this.name = name;
+        this.type = type;
+        this.sizeBytes = sizeBytes;
+    }
+
+    // getter / setter pentru dimensiune (are sens doar la FILE)
+    public long getSizeBytes() { return sizeBytes; }
+    public void setSizeBytes(long sizeBytes) { this.sizeBytes = sizeBytes; }
 
     public boolean canHaveChildren() {
         return type == NodeType.DRIVE || type == NodeType.FOLDER;

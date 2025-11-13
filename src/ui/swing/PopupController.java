@@ -39,13 +39,40 @@ public class PopupController {
         tree.expandPath(new TreePath(clicked.getPath()));
     }
 
+
     public void createFile(DefaultMutableTreeNode clicked){
         FsNode d = (FsNode) clicked.getUserObject();
-        if(d.getType()==NodeType.FILE) return;
-        String name = JOptionPane.showInputDialog("File name:");
-        if(name==null || name.isBlank()) return;
-        service.createFile(pathOf(clicked), name.trim());
-        DefaultMutableTreeNode child = new DefaultMutableTreeNode(new FsNode(name.trim(), NodeType.FILE));
+        if(d.getType() == NodeType.FILE) return;
+
+        String name = JOptionPane.showInputDialog("File name (ex: video.mp4):");
+        if(name == null || name.isBlank()) return;
+        name = name.trim();
+
+        // intrebam dimensiunea
+        long size = 0;
+        while (true) {
+            String sizeStr = JOptionPane.showInputDialog("File size in bytes:");
+            if (sizeStr == null) {
+                // user a apasat Cancel -> iesim, nu cream fisierul
+                return;
+            }
+            sizeStr = sizeStr.trim();
+            if (sizeStr.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Introdu o dimensiune (numar intreg).");
+                continue;
+            }
+            try {
+                size = Long.parseLong(sizeStr);
+                if (size < 0) throw new NumberFormatException();
+                break;
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null, "Dimensiune invalida. Scrie un numar intreg pozitiv.");
+            }
+        }
+
+        // model + service
+        FsNode created = service.createFile(pathOf(clicked), name, size);
+        DefaultMutableTreeNode child = new DefaultMutableTreeNode(created);
         model.insertNodeInto(child, clicked, clicked.getChildCount());
         tree.expandPath(new TreePath(clicked.getPath()));
     }
@@ -71,10 +98,41 @@ public class PopupController {
         tree.setSelectionPath(new TreePath(parent.getPath()));
     }
 
-    public void stats(DefaultMutableTreeNode clicked){
-        Stats s = service.stats(pathOf(clicked));
-        FsNode d = (FsNode) clicked.getUserObject();
-        JOptionPane.showMessageDialog(null,
-                "Name: "+d.getName()+"\nType: "+d.getType()+"\nTotal: "+s.totalNodes+"\nFolders: "+s.folders+"\nFiles: "+s.files+"\nMax depth: "+s.maxDepth);
+public void stats(DefaultMutableTreeNode clicked){
+    FsNode d = (FsNode) clicked.getUserObject();
+
+    if (d.getType() == NodeType.FILE) {
+        String name = d.getName();
+        String ext;
+
+        int dot = name.lastIndexOf('.');
+        if (dot != -1 && dot < name.length() - 1) {
+            ext = name.substring(dot + 1);
+        } else {
+            ext = "(no extension)";
+        }
+
+        JOptionPane.showMessageDialog(
+                null,
+                "File name: " + name +
+                        "\nExtension: " + ext +
+                        "\nSize: " + d.getSizeBytes() + " bytes"
+        );
+        return;
     }
+
+    // pentru FOLDER / DRIVE: agregam prin service.stats
+    Stats s = service.stats(pathOf(clicked));
+
+    JOptionPane.showMessageDialog(
+            null,
+            "Name: " + d.getName() +
+                    "\nType: " + d.getType() +
+                    "\nTotal size: " + s.totalSizeBytes + " bytes" +
+                    "\nFolders: " + s.folders +
+                    "\nFiles: " + s.files +
+                    "\nTotal nodes: " + s.totalNodes +
+                    "\nMax depth: " + s.maxDepth
+    );
+}
 }

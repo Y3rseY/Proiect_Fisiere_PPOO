@@ -30,6 +30,7 @@ public class FileTreeFrame extends JFrame {
         tree  = new JTree(model);
         tree.setRootVisible(false);
         tree.setShowsRootHandles(true);
+        tree.setCellRenderer(new FsNodeRenderer());
         expandFirstLevel();
 
         // Wire controller (service)
@@ -86,6 +87,7 @@ public class FileTreeFrame extends JFrame {
         miRename.addActionListener   (e -> controller.rename(clickedNode));
         miDelete.addActionListener   (e -> controller.delete(clickedNode));
         miStats.addActionListener    (e -> controller.stats(clickedNode));
+
 
         p.add(miNewFolder); p.add(miNewFile); p.addSeparator();
         p.add(miRename); p.add(miDelete); p.add(miStats);

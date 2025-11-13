@@ -5,20 +5,20 @@
 Acest proiect reprezinta o aplicatie Java Swing pentru gestionarea unei structuri de fisiere simulate, folosind concepte avansate de Programare Orientata pe Obiecte (POO). Aplicatia permite vizualizarea, modificarea si salvarea structurii de tip arbore, folosind clase precum `FsNode`, `FileTreeService` si `FileTreeRepository`.
 
 ### Functionalitati principale
-- Afisarea structurii de fisiere in JTree cu iconite personalizate  
-- Creare / redenumire / stergere fisiere si foldere  
-- Mutare fisiere prin drag and drop intre foldere  
-- Calcularea statisticilor pentru fisiere, foldere si drive-uri  
-- Salvarea si incarcarea structurii din fisier text (`structura.txt`)  
-- Calcularea dimensiunilor fisierelor si a dimensiunii totale a folderelor  
-- Generare documentatie automata cu JavaDoc  
+- Afisarea structurii de fisiere in JTree cu iconite personalizate
+- Creare / redenumire / stergere fisiere si foldere
+- Mutare fisiere prin drag and drop intre foldere
+- Calcularea statisticilor pentru fisiere, foldere si drive-uri
+- Salvarea si incarcarea structurii din fisier text (`structura.txt`)
+- Calcularea dimensiunilor fisierelor si a dimensiunii totale a folderelor
+- Generare documentatie automata cu JavaDoc
 
 ### Tehnologii folosite
-- Java 17 / Java 25  
-- Swing (JTree, PopupMenu, TransferHandler)  
-- Programare orientata pe obiecte (compozitie, polimorfism, incapsulare)  
-- JavaDoc pentru documentatie  
-- Manipulare fisiere text (I/O)  
+- Java 17 / Java 25
+- Swing (JTree, PopupMenu, TransferHandler)
+- Programare orientata pe obiecte (compozitie, polimorfism, incapsulare)
+- JavaDoc pentru documentatie
+- Manipulare fisiere text (I/O)
 
 ### Structura proiectului
 ```
@@ -69,20 +69,20 @@ D:
 This project is a Java Swing application that simulates a file system using advanced Object-Oriented Programming principles. The GUI allows users to visualize, modify, and persist a tree-based file structure.
 
 ### Main features
-- Display hierarchical file structure using JTree with custom icons  
-- Create / rename / delete folders and files  
-- Drag and drop file movement between directories  
-- Compute statistics for folders, files, and drives  
-- Load and save structure from a text file (`structura.txt`)  
-- Store file sizes and calculate aggregated folder sizes  
-- Fully generated JavaDoc documentation  
+- Display hierarchical file structure using JTree with custom icons
+- Create / rename / delete folders and files
+- Drag and drop file movement between directories
+- Compute statistics for folders, files, and drives
+- Load and save structure from a text file (`structura.txt`)
+- Store file sizes and calculate aggregated folder sizes
+- Fully generated JavaDoc documentation
 
 ### Technologies used
-- Java 17 / Java 25  
-- Swing UI  
-- Object-Oriented Programming patterns  
-- JavaDoc generator  
-- File I/O (text format)  
+- Java 17 / Java 25
+- Swing UI
+- Object-Oriented Programming patterns
+- JavaDoc generator
+- File I/O (text format)
 
 ### Project structure
 ```
@@ -124,3 +124,4 @@ java app.Main
 **Vlad Anghel (Y3rseY)**  
 Proiect pentru POOO — Master ASE CSIE  
 2025
+

@@ -1,6 +1,6 @@
 # FileTree Manager (Proiect POOO)
 
-## Descriere (Romana - fara diacritice)
+## Descriere (Romana)
 
 Acest proiect reprezinta o aplicatie Java Swing pentru gestionarea unei structuri de fisiere simulate, folosind concepte avansate de Programare Orientata pe Obiecte (POO). Aplicatia permite vizualizarea, modificarea si salvarea structurii de tip arbore, folosind clase precum `FsNode`, `FileTreeService` si `FileTreeRepository`.
 
@@ -14,7 +14,7 @@ Acest proiect reprezinta o aplicatie Java Swing pentru gestionarea unei structur
 - Generare documentatie automata cu JavaDoc
 
 ### Tehnologii folosite
-- Java 17 / Java 25
+-  Java 25
 - Swing (JTree, PopupMenu, TransferHandler)
 - Programare orientata pe obiecte (compozitie, polimorfism, incapsulare)
 - JavaDoc pentru documentatie
@@ -78,7 +78,7 @@ This project is a Java Swing application that simulates a file system using adva
 - Fully generated JavaDoc documentation
 
 ### Technologies used
-- Java 17 / Java 25
+-  Java 25
 - Swing UI
 - Object-Oriented Programming patterns
 - JavaDoc generator

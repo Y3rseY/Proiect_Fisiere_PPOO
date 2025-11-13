@@ -11,14 +11,14 @@ import java.awt.datatransfer.*;
 
 /**
  * TransferHandler pentru JTree-ul de fisiere.
- * Gestioneaza operatia de drag & drop intre nodurile arborelui:
+ * Gestioneaza operatia de drag and drop intre nodurile arborelui:
  * muta atat nodurile din modelul logic ({@link FsNode}), cat si nodurile
  * corespondente din arborele Swing ({@link DefaultMutableTreeNode}).
  */
 public class FileTreeTransferHandler extends TransferHandler {
 
     /**
-     * Arborele Swing asupra caruia se aplica drag & drop.
+     * Arborele Swing asupra caruia se aplica drag and drop.
      */
     private final JTree tree;
 
@@ -38,7 +38,7 @@ public class FileTreeTransferHandler extends TransferHandler {
     private FsNode draggedFsNode;
 
     /**
-     * Creeaza un handler de drag & drop pentru un anumit arbore si serviciu.
+     * Creeaza un handler de drag and drop pentru un anumit arbore si serviciu.
      *
      * @param tree    JTree-ul care afiseaza structura
      * @param service serviciul care opereaza pe modelul FsNode

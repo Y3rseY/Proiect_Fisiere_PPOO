@@ -57,7 +57,7 @@ public class FileTreeFrame extends JFrame {
      * <ul>
      *     <li>Incarca structura din fisierul {@code structura.txt}.</li>
      *     <li>Construieste arborele Swing pe baza modelului.</li>
-     *     <li>Configureaza renderer-ul de iconite, drag & drop si meniul contextual.</li>
+     *     <li>Configureaza renderer-ul de iconite, drag and drop si meniul contextual.</li>
      *     <li>Seteaza comportamentul la inchidere (intrebare de salvare).</li>
      * </ul>
      */

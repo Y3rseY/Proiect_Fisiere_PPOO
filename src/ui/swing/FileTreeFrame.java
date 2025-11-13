@@ -10,17 +10,59 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 
+/**
+ * Fereastra principala Swing care afiseaza structura logica de fisiere
+ * intr-un {@link JTree} si permite operatii asupra ei printr-un meniu contextual:
+ * creare folder/fisier, redenumire, stergere si afisare statistici.
+ * <p>
+ * La pornire, structura este incarcata din fisierul text {@code structura.txt},
+ * apoi este construita o reprezentare echivalenta in arborele Swing.
+ * La inchidere, utilizatorul este intrebat daca vrea sa salveze modificarile.
+ */
 public class FileTreeFrame extends JFrame {
+
+    /**
+     * Arborele Swing care afiseaza nodurile din model.
+     */
     private final JTree tree;
+
+    /**
+     * Modelul de date pentru arborele Swing.
+     */
     private final DefaultTreeModel model;
+
+    /**
+     * Nodul pe care s-a dat click dreapta ultima data (folosit de meniul contextual).
+     */
     private DefaultMutableTreeNode clickedNode;
+
+    /**
+     * Controller-ul care gestioneaza actiunile din meniul contextual
+     * si apeleaza metodele din {@link FileTreeService}.
+     */
     private final PopupController controller;
 
+    /**
+     * Radacina invizibila a modelului logic ({@link FsNode}).
+     */
     private FsNode rootModel;
+
+    /**
+     * Serviciul care incapsuleaza logica asupra arborelui de fisiere.
+     */
     private FileTreeService service;
 
+    /**
+     * Constructorul ferestrei principale.
+     * <ul>
+     *     <li>Incarca structura din fisierul {@code structura.txt}.</li>
+     *     <li>Construieste arborele Swing pe baza modelului.</li>
+     *     <li>Configureaza renderer-ul de iconite, drag & drop si meniul contextual.</li>
+     *     <li>Seteaza comportamentul la inchidere (intrebare de salvare).</li>
+     * </ul>
+     */
     public FileTreeFrame() {
-        super("File Structure");
+        super("Proiect Anghel Vlad-Andrei -- Structura fisiere");
 
         try { rootModel = new FileTreeRepository().loadFromText(new File("structura.txt")); }
         catch (Exception e){ throw new RuntimeException(e); }
@@ -71,9 +113,28 @@ public class FileTreeFrame extends JFrame {
         });
     }
 
+    /**
+     * Extinde primul nivel de noduri din arbore, astfel incat drive-urile
+     * sa fie vizibile imediat dupa pornirea aplicatiei.
+     */
+    private void expandFirstLevel(){
+        for(int i=0;i<tree.getRowCount();i++)
+            tree.expandRow(i);
+    }
 
-    private void expandFirstLevel(){ for(int i=0;i<tree.getRowCount();i++) tree.expandRow(i); }
-
+    /**
+     * Construieste meniul contextual (popup) asociat arborelui.
+     * Meniul contine actiunile:
+     * <ul>
+     *     <li>Create folder</li>
+     *     <li>Create file</li>
+     *     <li>Rename</li>
+     *     <li>Delete</li>
+     *     <li>Stats</li>
+     * </ul>
+     *
+     * @return un {@link JPopupMenu} configurat
+     */
     private JPopupMenu buildPopupMenu(){
         JPopupMenu p = new JPopupMenu();
         JMenuItem miNewFolder = new JMenuItem("Create folder");
@@ -94,6 +155,15 @@ public class FileTreeFrame extends JFrame {
         return p;
     }
 
+    /**
+     * Metoda apelata cand utilizatorul inchide fereastra.
+     * Afiseaza un dialog de confirmare:
+     * <ul>
+     *     <li>Daca se apasa Cancel, aplicatia ramane deschisa.</li>
+     *     <li>Daca se apasa Yes, se incearca salvarea structurii in {@code structura.txt}.</li>
+     *     <li>Daca salvarea reuseste sau se apasa No, aplicatia se inchide.</li>
+     * </ul>
+     */
     private void onBeforeExit() {
         int choice = JOptionPane.showConfirmDialog(
                 this,

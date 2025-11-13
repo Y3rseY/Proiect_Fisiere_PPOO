@@ -6,13 +6,29 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
+/**
+ * Clasa responsabila cu incarcare si salvarea structurii logice
+ * a sistemului de fisiere din/spre un fisier text (structura.txt).
+ * Formatul fiecarui nod:
+ *  - nume folder/drive
+ *  - pentru fisiere: nume//dimensiune
+ */
 public class FileTreeRepository {
+
+    /**
+     * Incarca arborele din fisierul dat.
+     * Fiecare nivel este indentat cu 3 spatii.
+     * Pentru fisiere formatul este nume//dimensiune.
+     *
+     * @param file fisierul text de intrare
+     * @return radacina invizibila ce contine toti driverii
+     */
     public FsNode loadFromText(File file) throws IOException {
         FsNode root = new FsNode("(root)", NodeType.FOLDER);
         Map<Integer, FsNode> levelMap = new HashMap<>();
         levelMap.put(0, root);
 
-        // if(!file.exists()) return sample(root);
+
 
         try (BufferedReader br = new BufferedReader(
                 new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
@@ -24,13 +40,13 @@ public class FileTreeRepository {
                 int leading = countLeadingSpaces(line);
                 int level = leading / 3;
 
-                // continutul fara spatiile de la inceput
+
                 String content = line.substring(leading);
 
                 String name;
                 long size = 0L;
 
-                // cautam separatorul //
+
                 int sep = content.lastIndexOf("//");
                 if (sep != -1) {
                     name = content.substring(0, sep).trim();
@@ -39,11 +55,11 @@ public class FileTreeRepository {
                         try {
                             size = Long.parseLong(sizeStr);
                         } catch (NumberFormatException e) {
-                            size = 0L; // daca e corupt, ignoram size-ul
+                            size = 0L;
                         }
                     }
                 } else {
-                    // nu exista // -> doar nume (folder/drive sau fisier fara size)
+
                     name = content.trim();
                 }
 
@@ -64,6 +80,14 @@ public class FileTreeRepository {
         return root;
     }
 
+    /**
+     * Salveaza structura arborelui in fisierul dat.
+     * Foloseste indentare cu 3 spatii pentru niveluri.
+     * Pentru fisiere scrie formatul nume//dimensiune.
+     *
+     * @param root radacina logica
+     * @param file fisierul de iesire
+     */
     public void saveToText(FsNode root, File file) throws IOException {
         try (BufferedWriter bw = new BufferedWriter(
                 new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8))) {
@@ -73,6 +97,13 @@ public class FileTreeRepository {
         }
     }
 
+    /**
+     * Scrie recursiv nodurile cu indentarea corespunzatoare.
+     *
+     * @param n   nodul curent
+     * @param lvl nivelul de indentare
+     * @param bw  writer
+     */
     private void writeRec(FsNode n, int lvl, BufferedWriter bw) throws IOException {
         // indent
         bw.write("   ".repeat(lvl));
@@ -92,26 +123,29 @@ public class FileTreeRepository {
         }
     }
 
+    /**
+     * Numarul de spatii de la inceputul liniei.
+     *
+     * @param s linia curenta
+     * @return numarul de spatii
+     */
     private int countLeadingSpaces(String s) {
         int i = 0;
         while (i < s.length() && s.charAt(i) == ' ') i++;
         return i;
     }
 
+    /**
+     * Deduce tipul nodului dupa nume.
+     *
+     * @param name numele nodului
+     * @return tipul nodului
+     */
     private NodeType guessType(String name) {
         if (name.endsWith(":")) return NodeType.DRIVE;
         if (name.contains(".")) return NodeType.FILE;
         return NodeType.FOLDER;
     }
 
-//    private FsNode sample(FsNode root){
-//        FsNode c = new FsNode("C:", NodeType.DRIVE); root.addChild(c);
-//        FsNode f1 = new FsNode("folder1", NodeType.FOLDER); c.addChild(f1);
-//        f1.addChild(new FsNode("folder2", NodeType.FOLDER));
-//        f1.addChild(new FsNode("folder3", NodeType.FOLDER));
-//        c.addChild(new FsNode("folder4", NodeType.FOLDER));
-//        root.addChild(new FsNode("D:", NodeType.DRIVE));
-//        return root;
-//    }
 }
 

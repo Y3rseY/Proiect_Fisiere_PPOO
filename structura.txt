@@ -1,10 +1,9 @@
 C:
    folder1
       folder3
-         grrpow.json
-         snsf
-            
    folder4
-D:
    folderA
+      grrpow.json
+D:
+   snsf
       fisierX.mp3

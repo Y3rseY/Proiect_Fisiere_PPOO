@@ -47,6 +47,42 @@ public class FileTreeService {
         n.getParent().removeChild(n);
     }
 
+    public void moveNode(FsNode nodeToMove, FsNode newParent) {
+        if (nodeToMove == null || newParent == null) return;
+
+        // nu mutam root-ul invizibil
+        if (nodeToMove == root) {
+            throw new IllegalArgumentException("Nu poti muta root-ul");
+        }
+
+        // noul parinte trebuie sa poata avea copii (DRIVE sau FOLDER)
+        if (!newParent.canHaveChildren()) {
+            throw new IllegalArgumentException("Poti muta doar in drive sau folder");
+        }
+
+        // nu mutam un nod intr-un descendent al lui (ca sa nu facem ciclu)
+        if (isDescendant(newParent, nodeToMove)) {
+            throw new IllegalArgumentException("Nu poti muta un folder in el insusi sau intr-un descendent");
+        }
+
+        FsNode oldParent = nodeToMove.getParent();
+        if (oldParent != null) {
+            oldParent.removeChild(nodeToMove);
+        }
+
+        newParent.addChild(nodeToMove);
+    }
+
+    private boolean isDescendant(FsNode node, FsNode potentialAncestor) {
+        FsNode cur = node;
+        while (cur != null) {
+            if (cur == potentialAncestor) return true;
+            cur = cur.getParent();
+        }
+        return false;
+    }
+
+
     public Stats stats(String[] path){
         FsNode n = find(path);
         Stats s = new Stats();

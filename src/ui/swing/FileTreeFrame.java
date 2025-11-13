@@ -22,12 +22,9 @@ public class FileTreeFrame extends JFrame {
     public FileTreeFrame() {
         super("File Structure");
 
-        // Load model
-        //FsNode rootModel;
         try { rootModel = new FileTreeRepository().loadFromText(new File("structura.txt")); }
         catch (Exception e){ throw new RuntimeException(e); }
 
-        // Build fx tree
         DefaultMutableTreeNode swingRoot = TreeBuilder.buildSwingTree(rootModel);
         model = new DefaultTreeModel(swingRoot);
         tree  = new JTree(model);
@@ -36,10 +33,16 @@ public class FileTreeFrame extends JFrame {
         expandFirstLevel();
 
         // Wire controller (service)
-        FileTreeService service = new FileTreeService(rootModel);
+        service = new FileTreeService(rootModel);
         controller = new PopupController(tree, model, service);
 
-        // Popup
+        // Drag & Drop
+        tree.setDragEnabled(true);
+        tree.setDropMode(DropMode.ON);
+        tree.setTransferHandler(new FileTreeTransferHandler(tree, service));
+        tree.setExpandsSelectedPaths(true);
+
+        // Popup (ramane cum era)
         JPopupMenu popup = buildPopupMenu();
         tree.addMouseListener(new MouseAdapter() {
             private void maybe(MouseEvent e){
@@ -62,10 +65,11 @@ public class FileTreeFrame extends JFrame {
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             @Override public void windowClosing(WindowEvent e) {
-                onBeforeExit();  // rulează funcția ta înainte de închidere
+                onBeforeExit();
             }
         });
     }
+
 
     private void expandFirstLevel(){ for(int i=0;i<tree.getRowCount();i++) tree.expandRow(i); }
 

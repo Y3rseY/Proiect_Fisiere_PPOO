@@ -1,11 +1,14 @@
 C:
    folder1
       folder3
-   folder4
-      maxpower.mp2//566
-   folderA
-      grrpow.json//3000
-      file3.jpg//4545
+         folder67
+            //0
+            fisier.png//5897
 D:
    snsf
       fisierX.mp3//600
+      folderA
+         grrpow.json//3000
+         file3.jpg//4545
+   folder4
+      maxpower.mp2//566

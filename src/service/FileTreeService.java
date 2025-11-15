@@ -54,7 +54,6 @@ public class FileTreeService {
     /**
      * Creeaza un folder nou ca si copil al unui nod dat prin cale.
      * <p>
-     * Atentie: in versiunea curenta adauga si un copil "dummy" de tip FILE
      * cu nume gol, conform implementarii existente.
      *
      * @param parentPath calea pana la parinte (ex: ["C:", "folder1"])
@@ -65,7 +64,7 @@ public class FileTreeService {
     public FsNode createFolder(String[] parentPath, String name){
         FsNode parent = find(parentPath);
         FsNode node = new FsNode(name, NodeType.FOLDER);
-        node.addChild(new FsNode("",NodeType.FILE));
+       // node.addChild(new FsNode("",NodeType.FILE)); //asta era simulare de fisier inainte de nodeRenderer
         parent.addChild(node);
 
         return node;

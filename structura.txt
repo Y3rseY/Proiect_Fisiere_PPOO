@@ -2,13 +2,16 @@ C:
    folder1
       folder3
          folder67
-            //0
             fisier.png//5897
+         fisierX.mp3//600
+         foto
+   muzica
+      hardstyle.mp3//50000
+      alex_velea.mp3//35670
 D:
    snsf
-      fisierX.mp3//600
       folderA
          grrpow.json//3000
-         file3.jpg//4545
+      file3.jpg//4545
    folder4
       maxpower.mp2//566
